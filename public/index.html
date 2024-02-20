@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <script>
+      CONTRACT_ADDRESS = "0xFA5B77339281a26808d979FE154C185f59b9Ad3c"
+      NETWORK_ID = 168587773
+      STYLES = { "primaryColor": "#2986CC", "backgroundColor": "#ffffff", "primaryTextColor": "#1f1f1f", "secondaryTextColor": "#9e9e9e", "buttonTextColor": "#ffffff", "hintBackgroundColor": "#9e9e9e", "theme": "light", "corners": "rounded"}
+      DEFAULTS = { contractMethods: {"mint":"mint","price":"price"} }
+      EMBED_ID = 41
+
+      CONTRACT_ABI =[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Deposit",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "executor",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "strategyId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "token_selection",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "stop_loss",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "take_profit",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "position_size",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "max_drawdown_limit",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct SmartBot.StrategyParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "StrategyExecuted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Withdrawal",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "balances",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "blastContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "claimAllGas",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      }
+    ],
+    "name": "claimAllYield",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "claimMaxGas",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "claimYield",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+    ],
+    "name": "deposit",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "emergencyStop",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "token_selection",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stop_loss",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "take_profit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "position_size",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "max_drawdown_limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "strategy_1",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "token_selection",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stop_loss",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "take_profit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "position_size",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "max_drawdown_limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "strategy_2",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "token_selection",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stop_loss",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "take_profit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "position_size",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "max_drawdown_limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "strategy_3",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "token_selection",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stop_loss",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "take_profit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "position_size",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "max_drawdown_limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "strategy_4",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "token_selection",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stop_loss",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "take_profit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "position_size",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "max_drawdown_limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "strategy_5",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "token_selection",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stop_loss",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "take_profit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "position_size",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "max_drawdown_limit",
+        "type": "uint256"
+      }
+    ],
+    "name": "strategy_6",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "toggleEmergencyStop",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawETH",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <button id="withdraw-button">withdraw</button>
+    <button id="deposit-button">Deposit</button>
+    <button id="strategy_1-button">strategy_1</button>
+    <button id="strategy_2-button">strategy_2</button>
+    <button id="strategy_3-button">strategy_3</button>
+    <button id="strategy_4-button">strategy_4</button>
+    <button id="strategy_5-button">strategy_5</button>
+    <button id="strategy_6-button">strategy_6</button>
+
+
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
