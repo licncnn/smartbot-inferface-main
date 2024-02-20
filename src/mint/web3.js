@@ -309,8 +309,8 @@ export const withdraw_func = async (nTokens) => {
     }
     // const numberOfTokens = (nTokens ?? 1) * 1e18;
     const BigNumber = require('bignumber.js'); // 假设你使用的是bignumber.js库
-    const numberOfTokens = new BigNumber(nTokens ?? 1).multipliedBy(new BigNumber(1e18));
-
+    // const numberOfTokens = new BigNumber(nTokens ?? 1).multipliedBy(new BigNumber(1e18));
+    const numberOfTokens = new BigNumber(nTokens ?? 1).multipliedBy(new BigNumber('1000000000000000000'));
     
     const txParams = {
         from: wallet,
