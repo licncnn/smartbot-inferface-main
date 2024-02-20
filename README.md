@@ -1,5 +1,9 @@
 # Mint button for Webflow/Wix/Wordpress
-
+SET NODE_OPTIONS=--openssl-legacy-provider &&
+SET NODE_OPTIONS=--openssl-legacy-provider &&
+SET NODE_OPTIONS=--openssl-legacy-provider &&
+SET NODE_OPTIONS=--openssl-legacy-provider &&
+SET NODE_OPTIONS=--openssl-legacy-provider &&
 <img src="public/images/screenshot.png" width="300" />
 
 Add a mint button to your website without coding skills required.
