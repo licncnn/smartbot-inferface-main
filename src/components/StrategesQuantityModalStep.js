@@ -23,7 +23,7 @@ export const StrategiesQuantityModalStep = ({ setIsLoading, setTxHash,strategyID
             //     positionSize,
             //     maxDrawdownLimit,
             // });
-            const txResponse = await executeStrategyFunction(strategyID, {
+            const { tx } = await executeStrategyFunction(strategyID, {
                 tokenSelection,
                 stopLoss,
                 takeProfit,
@@ -31,22 +31,57 @@ export const StrategiesQuantityModalStep = ({ setIsLoading, setTxHash,strategyID
                 maxDrawdownLimit,
             });
 
+            // 监听 transactionHash 事件
+            tx.on("transactionHash", (hash) => {
+                console.log(`Transaction hash: ${hash}`);
+                setTxHash(hash);
+                showAlert(`Transaction submitted: ${hash}`, "info");
+            });
 
-            // 监听交易的状态
-            if (txResponse && txResponse.hash) {
-                setTxHash(txResponse.hash); // 设置交易哈希
-                showAlert(`Transaction submitted: ${txResponse.hash}`, "info");
-
-                const receipt = await txResponse.wait(); // 等待交易确认
-                if (receipt.status === 1) {
+            // 监听 confirmation 事件
+            tx.on("confirmation", (confirmationNumber, receipt) => {
+                console.log(`Transaction confirmed, confirmation number: ${confirmationNumber}`);
+                setIsLoading(false);
+                if (receipt.status) {
                     showAlert("Strategy executed successfully", "success");
                 } else {
                     showAlert("Strategy execution failed", "error");
                 }
-            }
+            });
+
+            // 监听 error 事件
+            tx.on("error", (error) => {
+                console.error("Transaction error", error);
+                setIsLoading(false);
+                const { message } = parseTxError(error);
+                showAlert(`Strategy execution error: ${message}`, "error");
+            });
+
+            
+            // // 监听交易的状态
+            // console.log("txResponse: ",txResponse)
+            // if (txResponse && txResponse.hash) {
+            //     setTxHash(txResponse.hash); // 设置交易哈希
+            //     showAlert(`Transaction submitted: ${txResponse.hash}`, "info");
+
+            //     const receipt = await txResponse.wait(); // 等待交易确认
+            //     console.log("receipt : ",receipt)
+            //     if (receipt.status === 1) {
+            //         showAlert("Strategy executed successfully", "success");
+            //     } else {
+            //         showAlert("Strategy execution failed", "error");
+            //     }
+            // }
         } catch (e) {
+
+            console.error("Execution error", e);
+            setIsLoading(false);
             const { message } = parseTxError(e);
             showAlert(`Strategy execution error: ${message}`, "error");
+
+
+            // const { message } = parseTxError(e);
+            // showAlert(`Strategy execution error: ${message}`, "error");
         } finally {
             setIsLoading(false);
         }

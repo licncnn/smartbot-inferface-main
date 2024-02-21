@@ -33,6 +33,7 @@ const AutoHideAlert = (props, ref) => {
 export const alertRef = React.createRef();
 
 export const showAlert = (text, type) => {
+    console.log("calling show laert ",text,type)
     alertRef.current?.setText(text);
     alertRef.current?.setType(type);
     alertRef.current?.setIsOpen(true);
